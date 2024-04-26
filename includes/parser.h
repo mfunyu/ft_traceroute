@@ -10,21 +10,6 @@ typedef enum e_flags
 	TOTAL
 }			t_flags;
 
-typedef enum e_parse_errs
-{
-	INVALID,
-	MISSING,
-	NOT_ALLOWED,
-}			t_parse_errs;
-
-typedef struct s_options
-{
-	char	short_option;
-	char	*long_option;
-	t_flags	flag;
-	bool	req_value;
-}			t_options;
-
 typedef struct s_args
 {
 	int		flags[TOTAL];
