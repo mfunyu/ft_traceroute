@@ -27,10 +27,11 @@ Recoding the traceroute command to deepen the knowledge of the network (TCP/IP) 
 
 ### bonus
 
-  | option | details |
-  | :- | :- |
-  | --help | Print help info and exit. |
-  | -q, --queries | Sets the number of probe packets per hop. (default: 3) |
-  | -m, --max-hops | Specifies the maximum number of hops (max time-to-live value) traceroute will probe. (default: 30) |
-  | -p, --port | Specifies the destination port base traceroute will use (default: 33434) |
-  | -f, --first | Start from the first_ttl hop (instead from 1) | Start from the first_ttl hop (instead from 1) |
+  | option | parameter | details |
+  | :- | :-: | :- |
+  | --help | - | Print help info and exit. |
+  | -q, --queries | 1 - 10 (error) | Sets the number of probe packets per hop. (default: 3) |
+  | -m, --max-hops | 1 - 255 (error) | Specifies the maximum number of hops (max time-to-live value) traceroute will probe. (default: 30) |
+  | -p, --port | 1 - 65535 (loop) | Specifies the destination port base traceroute will use (default: 33434) |
+  | -f, --first | 1 - `max_hops` | Start from the first_ttl hop (instead from 1) | Start from the first_ttl hop (instead from 1) |
+  | -w, --wait | 0 - 60 (int) | wait NUM seconds for response (default: 3) |
