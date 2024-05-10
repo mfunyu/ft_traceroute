@@ -11,7 +11,7 @@
 static t_options	g_options[] = {
 {'?', "--help",		HELP,		false},
 # ifdef BONUS
-{'f', "--first-hop",	FHOP,	false},
+{'f', "--first-hop",	FHOP,	true},
 {'m', "--max-hop",		MHOP,	true},
 {'p', "--port",			PORT,	true},
 {'q', "--tries",		TRIES,	true},
@@ -34,7 +34,7 @@ static void	_parse_error_exit(t_parse_errs type, char *option, bool is_short)
 	else if (type == MISSING)
 	{
 		if (is_short)
-			fprintf(stderr, "option requires an argument --%s", option);
+			fprintf(stderr, "option requires an argument -- %s", option);
 		else
 			fprintf(stderr, "option '%s' requires an argument", option);
 
@@ -58,15 +58,27 @@ static int	_parse_value(char *value, int idx)
 	switch (g_options[idx].flag)
 	{
 # ifdef BONUS
-		case TTL:
-			if (ret == 0)
-				error_exit("option value too small");
-			if (error || ret < 0 || 256 <= ret)
-				error_exit("option value too big");
+		case FHOP:
+			if (error || ret <= 0 || 256 <= ret)
+				error_exit_parse("impossible distance", value);
 			break;
-		case SIZE:
-			if (error || ret < 0 || PING_MAX_DATALEN < ret)
-				error_exit("option value too big");
+		case MHOP:
+			if (error || ret <= 0 || 256 <= ret)
+				error_exit_parse("invalid hops value", value);
+			break;
+		case PORT:
+			if (error || ret <= 0 || 65536 < ret)
+				error_exit_parse("invalid port number", value);
+			break;
+		case TRIES:
+			if (error)
+				error_exit_usage("invalid value");
+			if (ret <= 0 || 10 < ret)
+				error_exit("number of tries should be between 1 and 10");
+			break;
+		case WAIT:
+			if (error || ret < 0 || 60 < ret)
+				error_exit_parse("ridiculous waiting time", value);
 			break;
 # endif
 		default:

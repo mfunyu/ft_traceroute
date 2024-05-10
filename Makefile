@@ -1,7 +1,8 @@
 NAME	:= ft_traceroute
 
 SRCS	:= ft_traceroute.c \
-			parser.c
+			parser.c \
+			error.c
 
 # ---------------------------------------------------------------------------- #
 #                                     PATHS                                    #
@@ -21,6 +22,10 @@ DEPS	:= $(OBJS:.o=.d)
 CC		:= gcc
 CFLAGS	:= -Wall -Wextra -Werror
 INCLUDES:= -I $(DIR_INCLUDES) -I $(LIBFT)
+
+ifdef BONUS
+	CFLAGS	+= -D BONUS
+endif
 
 # ---------------------------------------------------------------------------- #
 #                                     RULES                                    #
@@ -55,6 +60,9 @@ fclean	: clean
 re		: fclean
 	$(MAKE) all
 
+.PHONY	: bonus
+bonus	:
+	make BONUS=1
 
 # ---------------------------------------------------------------------------- #
 #                                    DOCKER                                    #

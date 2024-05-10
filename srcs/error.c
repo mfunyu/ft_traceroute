@@ -22,6 +22,12 @@ void	error_exit_strerr(const char *msg)
 	exit(EXIT_FAILURE);
 }
 
+void	error_exit_parse(const char *msg, const char *parameter)
+{
+	fprintf(stderr, "ft_traceroute: %s `%s'\n", msg, parameter);
+	exit(EXIT_FAILURE);
+}
+
 void	error_exit(const char *msg)
 {
 	fprintf(stderr, "ft_traceroute: %s\n", msg);
