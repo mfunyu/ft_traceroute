@@ -4,6 +4,7 @@
 
 !*.c
 !*.h
+!*.sh
 !Makefile
 !Readme.md
 !Dockerfile
