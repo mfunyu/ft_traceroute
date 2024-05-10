@@ -11,7 +11,11 @@ RESET="\033[m"
 PROMPT="${CYAN}\$>${RESET}"
 # ---------------------------------------------------------------------------- #
 
-FILE=../ft_traceroute
+# set FILE if env var does not exist
+if [[ -z "${FILE}" ]]; then
+	FILE=../ft_traceroute
+	#FILE=inetutils-traceroute
+fi
 
 values=(
 	abc
@@ -43,8 +47,8 @@ options=(
 for option in ${options[@]}; do
 	printf "${THICK}[Testing option $option]${RESET}\n"
 	for value in "${values[@]}"; do
-		printf "${PROMPT} ${FILE} google.com ${option} ${value}\n"
-		$FILE google.com $option $value
+		printf "${PROMPT} ${FILE} doesnotexist.com ${option} ${value}\n"
+		$FILE doesnotexist.com $option $value
 	done
 	printf "\n"
 done
