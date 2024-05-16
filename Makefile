@@ -76,3 +76,11 @@ docker :
 .PHONY:	conn
 conn	:
 	docker exec -it $(NAME)_img /bin/bash
+
+# ---------------------------------------------------------------------------- #
+#                                     TEST                                     #
+# ---------------------------------------------------------------------------- #
+
+.PHONY: test
+test	: all
+	cd ./test && ./test_compare.sh test_option_param.sh

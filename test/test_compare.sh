@@ -13,4 +13,4 @@ FILE=$MINE ./$test > mine 2>&1
 FILE=$REAL ./$test > real 2>&1
 sed -i "s!${MINE}!${REAL}!g" mine
 sed -i "s!ft_traceroute!${REAL}!g" mine
-diff -y mine real
+diff -y --width=150 mine real
