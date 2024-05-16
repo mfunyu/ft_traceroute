@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "error.h"
+#include "ft_traceroute.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -44,9 +45,11 @@ int	ft_traceroute(t_args *args)
 
 int	main(int ac, char **av)
 {
-	t_args	args = {0};
+	t_args			args = {0};
+	t_traceroute	traceroute = {0};
 
 	_handle_args(&args, ac, av);
+	init(&traceroute, &args);
 	ft_traceroute(&args);
 	return (0);
 }

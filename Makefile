@@ -2,7 +2,8 @@ NAME	:= ft_traceroute
 
 SRCS	:= ft_traceroute.c \
 			parser.c \
-			error.c
+			error.c \
+			init.c
 
 # ---------------------------------------------------------------------------- #
 #                                     PATHS                                    #
