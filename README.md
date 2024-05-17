@@ -29,8 +29,20 @@ Recoding the traceroute command to deepen the knowledge of the network (TCP/IP) 
 
   | option | parameter | details |
   | :- | :-: | :- |
-  | -f, --first | 1 - `max_hops` | Start from the first_ttl hop (instead from 1) | Start from the first_ttl hop (instead from 1) |
-  | -m, --max-hops | 1 - 255 (error) | Specifies the maximum number of hops (max time-to-live value) traceroute will probe. (default: 30) |
+  | -f, --first | 1 - `max_hops` | Start from the first_ttl hop (instead from 1) |
+  | -m, --max-hops | 1 - 255 (error) | Specifies the maximum number of hops (max time-to-live value) traceroute will probe. (default: 64) |
   | -p, --port | 1 - 65535 (loop) | Specifies the destination port base traceroute will use (default: 33434) |
   | -q, --queries | 1 - 10 (error) | Sets the number of probe packets per hop. (default: 3) |
   | -w, --wait | 0 - 60 (int) | wait NUM seconds for response (default: 3) |
+
+
+## Implementations
+
+- create socket
+- loop `num_max_hop` time
+  - loop  `num_tries` time
+    - send packet
+    - set timeout to `select()`
+      - wait response for max `num_wait` seconds
+    - print result ( ip & triptime / "*" )
+  - QUIT: if src is dst

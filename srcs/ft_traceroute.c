@@ -37,10 +37,34 @@ static void	_handle_args(t_args *args, int ac, char **av)
 		error_exit_usage("missing host operand");
 }
 
-int	ft_traceroute(t_args *args)
+void	run_try(t_trace *trace)
 {
-	(void)args;
-	return (0);
+	int		ready;
+
+	for (int i = 0; i < trace->num_tries; i++)
+	{
+		//select
+		ready = 0;
+		if (ready < 0)
+			error_exit("select");
+		if (ready == 0)
+		{
+			printf(" * ");
+			//flush
+			continue;
+		}
+	}
+	printf("\n");
+}
+
+void	ft_traceroute(t_trace *trace)
+{
+	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
+	{
+		printf(" %2d  ", hop);
+		run_try(trace);
+		trace->ttl++;
+	}
 }
 
 int	main(int ac, char **av)
@@ -50,6 +74,6 @@ int	main(int ac, char **av)
 
 	_handle_args(&args, ac, av);
 	init(&trace, &args);
-	ft_traceroute(&args);
+	ft_traceroute(&trace);
 	return (0);
 }
