@@ -1,5 +1,44 @@
 #include "ft_traceroute.h"
 #include "parser.h"
+#include "error.h"
+#include "libft.h"
+#include <netinet/in.h>
+#include <errno.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stddef.h>
+#include <sys/socket.h>
+
+int	init_socket()
+{
+	int		udpfd;
+
+	udpfd = socket(PF_INET, SOCK_DGRAM, 0);
+	if (udpfd < 0)
+		error_exit_strerr("socket");
+	return (udpfd);
+}
+
+void	set_sockaddr_by_hostname(struct sockaddr *addr, char const *hostname)
+{
+	struct addrinfo	hints = {
+		.ai_family = AF_INET,
+		.ai_socktype = SOCK_RAW,
+		.ai_protocol = IPPROTO_ICMP
+	};
+	struct addrinfo	*result;
+	int				ret;
+
+	ret = getaddrinfo(hostname, NULL, &hints, &result);
+	if (ret)
+	{
+		if (ret == EAI_NONAME)
+			error_exit("unknown host");
+		error_exit_gai("getaddrinfo error", ret);
+	}
+	ft_memcpy(addr, result->ai_addr, sizeof(struct sockaddr));
+	freeaddrinfo(result);
+}
 
 void	init(t_trace *trace, t_args *args)
 {
@@ -23,4 +62,7 @@ void	init(t_trace *trace, t_args *args)
 	if (args->flags[WAIT] != -1)
 		trace->num_wait = args->flags[WAIT];
 # endif
+	trace->ttl = trace->num_first_hop;
+	set_sockaddr_by_hostname(&trace->dst_addr, trace->dst_hostname);
+	trace->udpfd = init_socket();
 }

@@ -17,7 +17,7 @@ void	error_exit_strerr(const char *msg)
 {
 	fprintf(stderr, "ft_traceroute: %s", msg);
 	if (errno)
-		fprintf(stderr, " - %s", strerror(errno));
+		fprintf(stderr, "%s", strerror(errno));
 	fprintf(stderr, "\n");
 	exit(EXIT_FAILURE);
 }

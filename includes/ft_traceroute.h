@@ -1,6 +1,8 @@
 #ifndef FT_TRACEROUTE_H
 # define FT_TRACEROUTE_H
 
+# include <sys/socket.h>
+
 # define NUM_FIRST_HOP	1
 # define NUM_MAX_HOP	64
 # define NUM_PORT		33434
@@ -8,8 +10,10 @@
 # define NUM_WAIT		3
 
 typedef struct	s_trace {
-	int		sfd;
-	char	*dst_hostname;
+	int				udpfd;
+	char			*dst_hostname;
+	struct sockaddr	dst_addr;
+	int				ttl;
 
 	int		num_first_hop;
 	int		num_max_hop;
