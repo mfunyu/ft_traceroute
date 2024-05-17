@@ -7,7 +7,7 @@
 # define NUM_TRIES		3
 # define NUM_WAIT		3
 
-typedef struct	s_traceroute {
+typedef struct	s_trace {
 	int		sfd;
 	char	*dst_hostname;
 
@@ -16,11 +16,11 @@ typedef struct	s_traceroute {
 	int		num_port;
 	int		num_tries;
 	int		num_wait;
-}				t_traceroute;
+}				t_trace;
 
 typedef struct s_args	t_args;
 
-void	init(t_traceroute *traceroute, t_args *args);
+void	init(t_trace *trace, t_args *args);
 
 
 #endif /* FT_TRACEROUTE_H */
