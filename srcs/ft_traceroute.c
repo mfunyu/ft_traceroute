@@ -3,6 +3,8 @@
 #include "ft_traceroute.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/select.h>
+#include <sys/time.h>
 
 void	print_help(void)
 {
@@ -40,22 +42,38 @@ static void	_handle_args(t_args *args, int ac, char **av)
 void	run_try(t_trace *trace)
 {
 	int		ready;
+	int		maxfd;
+	fd_set	readfds;
 
+	maxfd = trace->udpfd + 1;
 	for (int i = 0; i < trace->num_tries; i++)
 	{
 		trace_send(trace);
-		// select
-		ready = 0;
+		FD_ZERO(&readfds);
+		FD_SET(trace->udpfd, &readfds);
+		ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
 		if (ready < 0)
 			error_exit("select");
 		if (ready == 0)
 		{
 			printf(" * ");
-			//flush
+			fflush(stdout);
 			continue;
+		}
+		else {
+			printf("  %dms", 42);
 		}
 	}
 	printf("\n");
+}
+
+void	set_ttl(int udpfd, int ttl)
+{
+	int	ret;
+
+	ret = setsockopt(udpfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
+	if (ret < 0)
+		error_exit_strerr("setsockopt");
 }
 
 void	ft_traceroute(t_trace *trace)
@@ -64,6 +82,7 @@ void	ft_traceroute(t_trace *trace)
 	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
 	{
 		printf(" %2d  ", hop);
+		set_ttl(trace->udpfd, trace->ttl);
 		run_try(trace);
 		trace->ttl++;
 	}

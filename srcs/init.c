@@ -75,4 +75,5 @@ void	init(t_trace *trace, t_args *args)
 	trace->dst_addr.sin_port = htons(trace->num_port);
 	set_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
 	trace->udpfd = init_socket();
+	trace->timeout.tv_sec = trace->num_wait;
 }

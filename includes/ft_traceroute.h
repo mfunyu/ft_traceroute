@@ -4,6 +4,7 @@
 # include <sys/socket.h>
 # include <arpa/inet.h>
 # include <netinet/udp.h>
+# include <sys/time.h>
 
 # define TRACE_DATALEN	9
 
@@ -28,6 +29,7 @@ typedef struct	s_trace {
 	struct sockaddr_in	dst_addr;
 	char				dst_ip[INET_ADDRSTRLEN];
 	int					ttl;
+	struct timeval 		timeout;
 
 	int		num_first_hop;
 	int		num_max_hop;
