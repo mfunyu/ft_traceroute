@@ -59,6 +59,7 @@ void	run_try(t_trace *trace)
 
 void	ft_traceroute(t_trace *trace)
 {
+	print_header(trace);
 	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
 	{
 		printf(" %2d  ", hop);

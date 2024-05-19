@@ -28,5 +28,6 @@ typedef struct s_args	t_args;
 
 void	init(t_trace *trace, t_args *args);
 
+void	print_header(t_trace *trace);
 
 #endif /* FT_TRACEROUTE_H */
