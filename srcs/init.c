@@ -19,6 +19,17 @@ int	init_socket()
 	return (udpfd);
 }
 
+void	set_ip_str_by_sockaddr(char *ip, struct sockaddr const *addr)
+{
+	struct sockaddr_in const	*addr_in;
+	char const					*ret;
+
+	addr_in = (struct sockaddr_in const *)addr;
+	ret = inet_ntop(AF_INET, &addr_in->sin_addr, ip, INET_ADDRSTRLEN);
+	if (!ret)
+		error_exit_strerr("inet_ntop error");
+}
+
 void	set_sockaddr_by_hostname(struct sockaddr *addr, char const *hostname)
 {
 	struct addrinfo	hints = {
@@ -64,5 +75,6 @@ void	init(t_trace *trace, t_args *args)
 # endif
 	trace->ttl = trace->num_first_hop;
 	set_sockaddr_by_hostname(&trace->dst_addr, trace->dst_hostname);
+	set_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
 	trace->udpfd = init_socket();
 }

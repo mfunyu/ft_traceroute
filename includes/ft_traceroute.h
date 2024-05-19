@@ -2,6 +2,7 @@
 # define FT_TRACEROUTE_H
 
 # include <sys/socket.h>
+# include <arpa/inet.h>
 
 # define NUM_FIRST_HOP	1
 # define NUM_MAX_HOP	64
@@ -13,6 +14,7 @@ typedef struct	s_trace {
 	int				udpfd;
 	char			*dst_hostname;
 	struct sockaddr	dst_addr;
+	char			dst_ip[INET_ADDRSTRLEN];
 	int				ttl;
 
 	int		num_first_hop;
