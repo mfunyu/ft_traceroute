@@ -43,7 +43,8 @@ void	run_try(t_trace *trace)
 
 	for (int i = 0; i < trace->num_tries; i++)
 	{
-		//select
+		trace_send(trace);
+		// select
 		ready = 0;
 		if (ready < 0)
 			error_exit("select");

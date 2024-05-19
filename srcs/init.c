@@ -19,23 +19,20 @@ int	init_socket()
 	return (udpfd);
 }
 
-void	set_ip_str_by_sockaddr(char *ip, struct sockaddr const *addr)
+void	set_ip_str_by_sockaddr(char *ip, struct sockaddr_in const *addr_in)
 {
-	struct sockaddr_in const	*addr_in;
-	char const					*ret;
+	char const	*ret;
 
-	addr_in = (struct sockaddr_in const *)addr;
 	ret = inet_ntop(AF_INET, &addr_in->sin_addr, ip, INET_ADDRSTRLEN);
 	if (!ret)
 		error_exit_strerr("inet_ntop error");
 }
 
-void	set_sockaddr_by_hostname(struct sockaddr *addr, char const *hostname)
+void	set_sockaddr_in_by_hostname(struct sockaddr_in *addr, char const *hostname)
 {
 	struct addrinfo	hints = {
 		.ai_family = AF_INET,
-		.ai_socktype = SOCK_RAW,
-		.ai_protocol = IPPROTO_ICMP
+		.ai_socktype = SOCK_DGRAM,
 	};
 	struct addrinfo	*result;
 	int				ret;
@@ -74,7 +71,8 @@ void	init(t_trace *trace, t_args *args)
 		trace->num_wait = args->flags[WAIT];
 # endif
 	trace->ttl = trace->num_first_hop;
-	set_sockaddr_by_hostname(&trace->dst_addr, trace->dst_hostname);
+	set_sockaddr_in_by_hostname(&trace->dst_addr, trace->dst_hostname);
+	trace->dst_addr.sin_port = htons(trace->num_port);
 	set_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
 	trace->udpfd = init_socket();
 }

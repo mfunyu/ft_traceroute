@@ -4,7 +4,8 @@ SRCS	:= ft_traceroute.c \
 			parser.c \
 			error.c \
 			init.c \
-			print.c
+			print.c \
+			send.c
 
 # ---------------------------------------------------------------------------- #
 #                                     PATHS                                    #
