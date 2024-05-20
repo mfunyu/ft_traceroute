@@ -26,7 +26,10 @@ int	_init_icmp_socket()
 	icmpfd = socket(PF_INET, SOCK_RAW, IPPROTO_ICMP);
 	if (icmpfd < 0)
 	{
-		error_exit_strerr("socket");
+		icmpfd = socket(PF_INET, SOCK_DGRAM, IPPROTO_ICMP);
+		if (icmpfd < 0) {
+			error_exit_strerr("socket");
+		}
 	}
 	return (icmpfd);
 }
