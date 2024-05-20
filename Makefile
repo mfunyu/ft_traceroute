@@ -90,4 +90,6 @@ conn	:
 
 .PHONY: test
 test	: all
+	$(MAKE) -j fclean
+	$(MAKE) -j bonus
 	cd ./test && ./test_compare.sh test_option_param.sh
