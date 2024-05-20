@@ -38,6 +38,7 @@ typedef struct	s_trace {
 	int					ttl;
 	struct timeval 		timeout;
 	int					port;
+
 	bool				is_terminated;
 
 	int		num_first_hop;
