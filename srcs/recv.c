@@ -2,8 +2,8 @@
 #include "error.h"
 #include "libft.h"
 #include "utils.h"
-#include <stdbool.h>
 #include "network.h"
+#include <stdbool.h>
 
 static void	_recv(t_trace *trace, t_packet *packet)
 {

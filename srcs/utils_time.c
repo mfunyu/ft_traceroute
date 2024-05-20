@@ -1,6 +1,6 @@
+#include "error.h"
 #include <stddef.h>
 #include <sys/time.h>
-#include "error.h"
 
 struct timeval	get_current_time(void)
 {

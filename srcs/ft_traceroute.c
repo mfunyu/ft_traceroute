@@ -1,6 +1,6 @@
+#include "ft_traceroute.h"
 #include "parser.h"
 #include "error.h"
-#include "ft_traceroute.h"
 #include "network.h"
 #include <stdlib.h>
 #include <stdio.h>
