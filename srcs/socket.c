@@ -28,3 +28,12 @@ int	socket_icmp()
 	}
 	return (icmpfd);
 }
+
+void	socket_set_ttl(int udpfd, int ttl)
+{
+	int	ret;
+
+	ret = setsockopt(udpfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
+	if (ret < 0)
+		error_exit_strerr("setsockopt");
+}

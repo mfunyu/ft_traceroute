@@ -1,6 +1,7 @@
 #include "parser.h"
 #include "error.h"
 #include "ft_traceroute.h"
+#include "network.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/select.h>
@@ -88,15 +89,6 @@ void	run_try(t_trace *trace)
 	printf("\n");
 }
 
-void	set_ttl(int udpfd, int ttl)
-{
-	int	ret;
-
-	ret = setsockopt(udpfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
-	if (ret < 0)
-		error_exit_strerr("setsockopt");
-}
-
 void	ft_traceroute(t_trace *trace)
 {
 	print_header(trace);
@@ -104,7 +96,7 @@ void	ft_traceroute(t_trace *trace)
 	{
 		trace->dst_addr.sin_port = htons(trace->port);
 		printf(" %2d  ", hop);
-		set_ttl(trace->udpfd, trace->ttl);
+		socket_set_ttl(trace->udpfd, trace->ttl);
 		run_try(trace);
 		if (trace->is_terminated)
 			break;
