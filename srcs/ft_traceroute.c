@@ -77,7 +77,7 @@ void	run_try(t_trace *trace)
 			printf(" * ");
 			fflush(stdout);
 		} else {
-			printf("  %dms", 42);
+			printf(" %.3fms", trace->triptime);
 		}
 	}
 	printf("\n");

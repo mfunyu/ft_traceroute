@@ -1,6 +1,7 @@
 #include "ft_traceroute.h"
 #include "error.h"
 #include "libft.h"
+#include "utils.h"
 #include <stdbool.h>
 #include <sys/socket.h>
 
@@ -31,11 +32,15 @@ bool	_is_valid_packet(t_packet *packet, int port)
 
 int	trace_recv(t_trace *trace)
 {
-	t_packet	packet = {0};
+	t_packet		packet = {0};
+	struct timeval	tv_recv;
 
 	_recv(trace, &packet);
+	tv_recv = get_current_time();
 	if (!_is_valid_packet(&packet, trace->port))
 		return (-1);
+
+	trace->triptime = diff_time(trace->tv_send, tv_recv);
 
 	if (packet.icmphdr.type == ICMP_DEST_UNREACH ||
 		packet.iphdr.saddr == trace->dst_addr.sin_addr.s_addr)

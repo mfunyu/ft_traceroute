@@ -39,8 +39,9 @@ typedef struct	s_trace {
 	struct timeval 		timeout;
 	int					port;
 
-	struct timeval		tv_send;
-	bool				is_terminated;
+	struct timeval	tv_send;
+	double			triptime;
+	bool			is_terminated;
 
 	int		num_first_hop;
 	int		num_max_hop;
