@@ -6,7 +6,8 @@ SRCS	:= ft_traceroute.c \
 			init.c \
 			print.c \
 			send.c \
-			recv.c
+			recv.c \
+			utils_time.c
 
 # ---------------------------------------------------------------------------- #
 #                                     PATHS                                    #
