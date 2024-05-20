@@ -6,6 +6,7 @@
 # include <netinet/udp.h>
 # include <netinet/ip_icmp.h>
 # include <sys/time.h>
+# include <stdbool.h>
 
 # define MAX_IPLEN	60
 # define MAX_ICMPLEN	76
@@ -28,12 +29,6 @@
 ** };
 */
 
-typedef enum	e_status {
-	CONTINUE = 0,
-	RETRY = -1,
-	STOP = 1
-}				t_status;
-
 typedef struct	s_trace {
 	int					udpfd;
 	int					icmpfd;
@@ -43,6 +38,7 @@ typedef struct	s_trace {
 	int					ttl;
 	struct timeval 		timeout;
 	int					port;
+	bool				is_terminated;
 
 	int		num_first_hop;
 	int		num_max_hop;
@@ -76,6 +72,6 @@ void	init(t_trace *trace, t_args *args);
 void	print_header(t_trace *trace);
 
 void	trace_send(t_trace *trace);
-t_status	trace_recv(t_trace *trace);
+int		trace_recv(t_trace *trace);
 
 #endif /* FT_TRACEROUTE_H */

@@ -39,46 +39,48 @@ static void	_handle_args(t_args *args, int ac, char **av)
 		error_exit_usage("missing host operand");
 }
 
-t_status	run_try(t_trace *trace)
+int	select_loop(t_trace *trace)
 {
-	int		ready;
-	int		maxfd;
 	fd_set	readfds;
-	bool	is_listening;
-	t_status	status = CONTINUE;
-	t_status	ret;
+	int		ready;
+	int		ret;
+	int		maxfd;
 
 	maxfd = trace->icmpfd + 1;
+	FD_ZERO(&readfds);
+	FD_SET(trace->icmpfd, &readfds);
+	trace->timeout.tv_sec = trace->num_wait;
+	trace->timeout.tv_usec = 0;
+	ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
+	if (ready < 0)
+		error_exit_strerr("select");
+	if (ready != 0) {
+		ret = trace_recv(trace);
+		if (ret == -1)
+			return (ret);
+	}
+	return (ready);
+}
+
+void	run_try(t_trace *trace)
+{
+	int		ready;
+
 	for (int i = 0; i < trace->num_tries; i++)
 	{
 		trace_send(trace);
-		is_listening = true;
-		while (is_listening) {
-			FD_ZERO(&readfds);
-			FD_SET(trace->icmpfd, &readfds);
-			trace->timeout.tv_sec = trace->num_wait;
-			trace->timeout.tv_usec = 0;
-			ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
-			if (ready < 0)
-				error_exit_strerr("select");
-			if (ready == 0)
-			{
-				printf(" * ");
-				fflush(stdout);
-			}
-			else {
-				ret = trace_recv(trace);
-				if (ret == RETRY)
-					continue;
-				if (ret == STOP)
-					status = STOP;
-				printf("  %dms", 42);
-			}
-			is_listening = false;
+		ready = -1;
+		while (ready < 0) {
+			ready = select_loop(trace);
+		}
+		if (ready == 0) {
+			printf(" * ");
+			fflush(stdout);
+		} else {
+			printf("  %dms", 42);
 		}
 	}
 	printf("\n");
-	return (status);
 }
 
 void	set_ttl(int udpfd, int ttl)
@@ -98,7 +100,8 @@ void	ft_traceroute(t_trace *trace)
 		trace->dst_addr.sin_port = htons(trace->port);
 		printf(" %2d  ", hop);
 		set_ttl(trace->udpfd, trace->ttl);
-		if (run_try(trace) == STOP)
+		run_try(trace);
+		if (trace->is_terminated)
 			break;
 		trace->ttl++;
 		trace->port++;
