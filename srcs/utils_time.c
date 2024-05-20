@@ -48,15 +48,3 @@ double	diff_time(struct timeval tv1, struct timeval tv2)
 	diff += ((double)tv2.tv_usec - (double)tv1.tv_usec) / 1000;
 	return (diff);
 }
-
-struct timeval	get_timeout_time(struct timeval interval, struct timeval last)
-{
-	struct timeval	now;
-	struct timeval	passed;
-	struct timeval	rest;
-
-	now = get_current_time();
-	passed = sub_time(last, now);
-	rest = sub_time(passed, interval);
-	return (rest);
-}

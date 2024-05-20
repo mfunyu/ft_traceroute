@@ -197,15 +197,3 @@ void	parse_args(t_args *args, int ac, char **av)
 	}
 	args->params[idx] = NULL;
 }
-
-void	print_args(t_args args)
-{
-	printf("[options]\n");
-	for (int i = 0; i < TOTAL; i++)
-		printf("%d: %d\n", i, args.flags[i]);
-
-	printf("[params]\n");
-	for (int i = 0; args.params[i]; i++)
-		printf("%s, ", args.params[i]);
-	printf("\n");
-}
