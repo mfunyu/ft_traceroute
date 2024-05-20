@@ -7,6 +7,8 @@ SRCS	:= ft_traceroute.c \
 			print.c \
 			send.c \
 			recv.c \
+			socket.c \
+			resolve.c \
 			utils_time.c
 
 # ---------------------------------------------------------------------------- #

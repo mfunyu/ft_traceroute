@@ -1,67 +1,6 @@
 #include "ft_traceroute.h"
 #include "parser.h"
-#include "error.h"
-#include "libft.h"
-#include <netinet/in.h>
-#include <errno.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <stddef.h>
-#include <sys/socket.h>
-
-int	_init_udp_socket()
-{
-	int		udpfd;
-
-	udpfd = socket(PF_INET, SOCK_DGRAM, 0);
-	if (udpfd < 0)
-		error_exit_strerr("socket");
-	return (udpfd);
-}
-
-int	_init_icmp_socket()
-{
-	int		icmpfd;
-
-	icmpfd = socket(PF_INET, SOCK_RAW, IPPROTO_ICMP);
-	if (icmpfd < 0)
-	{
-		icmpfd = socket(PF_INET, SOCK_DGRAM, IPPROTO_ICMP);
-		if (icmpfd < 0) {
-			error_exit_strerr("socket");
-		}
-	}
-	return (icmpfd);
-}
-
-void	set_ip_str_by_sockaddr(char *ip, struct sockaddr_in const *addr_in)
-{
-	char const	*ret;
-
-	ret = inet_ntop(AF_INET, &addr_in->sin_addr, ip, INET_ADDRSTRLEN);
-	if (!ret)
-		error_exit_strerr("inet_ntop error");
-}
-
-void	set_sockaddr_in_by_hostname(struct sockaddr_in *addr, char const *hostname)
-{
-	struct addrinfo	hints = {
-		.ai_family = AF_INET,
-		.ai_socktype = SOCK_DGRAM,
-	};
-	struct addrinfo	*result;
-	int				ret;
-
-	ret = getaddrinfo(hostname, NULL, &hints, &result);
-	if (ret)
-	{
-		if (ret == EAI_NONAME)
-			error_exit("unknown host");
-		error_exit_gai("getaddrinfo error", ret);
-	}
-	ft_memcpy(addr, result->ai_addr, sizeof(struct sockaddr));
-	freeaddrinfo(result);
-}
+#include "network.h"
 
 void	init(t_trace *trace, t_args *args)
 {
@@ -87,9 +26,9 @@ void	init(t_trace *trace, t_args *args)
 # endif
 	trace->ttl = trace->num_first_hop;
 	trace->port = trace->num_port;
-	set_sockaddr_in_by_hostname(&trace->dst_addr, trace->dst_hostname);
+	resolve_sockaddr_in_by_hostname(&trace->dst_addr, trace->dst_hostname);
 	trace->dst_addr.sin_port = htons(trace->port);
-	set_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
-	trace->udpfd = _init_udp_socket();
-	trace->icmpfd = _init_icmp_socket();
+	resolve_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
+	trace->udpfd = socket_udp();
+	trace->icmpfd = socket_icmp();
 }

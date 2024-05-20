@@ -3,7 +3,7 @@
 #include "libft.h"
 #include "utils.h"
 #include <stdbool.h>
-#include <sys/socket.h>
+#include "network.h"
 
 void	_recv(t_trace *trace, t_packet *packet)
 {
@@ -30,15 +30,6 @@ bool	_is_valid_packet(t_packet *packet, int port)
 	return (true);
 }
 
-void	set_ip_by_in_addr(char *ip, in_addr_t saddr)
-{
-	char const	*ret;
-
-	ret = inet_ntop(AF_INET, &saddr, ip, INET_ADDRSTRLEN);
-	if (!ret)
-		error_exit_strerr("inet_ntop error");
-}
-
 int	trace_recv(t_trace *trace)
 {
 	t_packet		packet = {0};
@@ -51,7 +42,7 @@ int	trace_recv(t_trace *trace)
 
 	trace->triptime = diff_time(trace->tv_send, tv_recv);
 
-	set_ip_by_in_addr(trace->src_ip, packet.iphdr.saddr);
+	resolve_ip_str_by_in_addr(trace->src_ip, packet.iphdr.saddr);
 
 	if (packet.icmphdr.type == ICMP_DEST_UNREACH ||
 		packet.iphdr.saddr == trace->dst_addr.sin_addr.s_addr)
