@@ -73,6 +73,7 @@ typedef struct s_args	t_args;
 
 void	init(t_trace *trace, t_args *args);
 
+void	print_help();
 void	print_header(t_trace *trace);
 
 void	trace_send(t_trace *trace);
