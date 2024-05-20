@@ -26,7 +26,7 @@ void	resolve_sockaddr_in_by_hostname(struct sockaddr_in *addr, char const *hostn
 	freeaddrinfo(result);
 }
 
-void	resolve_ip_str_by_sockaddr(char *ip, struct sockaddr_in const *addr_in)
+void	resolve_ip_str_by_sockaddr_in(char *ip, struct sockaddr_in const *addr_in)
 {
 	char const	*ret;
 

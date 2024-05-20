@@ -28,7 +28,7 @@ void	init(t_trace *trace, t_args *args)
 	trace->port = trace->num_port;
 	resolve_sockaddr_in_by_hostname(&trace->dst_addr, trace->dst_hostname);
 	trace->dst_addr.sin_port = htons(trace->port);
-	resolve_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
+	resolve_ip_str_by_sockaddr_in(trace->dst_ip, &trace->dst_addr);
 	trace->udpfd = socket_udp();
 	trace->icmpfd = socket_icmp();
 }
