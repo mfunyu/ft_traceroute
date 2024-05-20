@@ -5,7 +5,8 @@ SRCS	:= ft_traceroute.c \
 			error.c \
 			init.c \
 			print.c \
-			send.c
+			send.c \
+			recv.c
 
 # ---------------------------------------------------------------------------- #
 #                                     PATHS                                    #

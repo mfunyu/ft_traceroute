@@ -4,7 +4,12 @@
 # include <sys/socket.h>
 # include <arpa/inet.h>
 # include <netinet/udp.h>
+# include <netinet/ip_icmp.h>
 # include <sys/time.h>
+
+# define MAX_IPLEN	60
+# define MAX_ICMPLEN	76
+# define MAX_DATALEN	65535 - MAX_IPLEN - MAX_ICMPLEN
 
 # define TRACE_DATALEN	9
 
@@ -39,6 +44,24 @@ typedef struct	s_trace {
 	int		num_wait;
 }				t_trace;
 
+typedef struct	s_packet
+{
+	struct iphdr	iphdr;
+	struct icmphdr	icmphdr;
+	union
+	{
+		char			data[MAX_DATALEN];
+		struct
+		{
+			struct iphdr	iphdr;
+			struct icmphdr	icmphdr;
+		} error;
+	} un;
+# define req_iphdr		un.error.iphdr
+# define req_icmphdr	un.error.icmphdr
+# define icmpdata		un.data
+}				t_packet;
+
 typedef struct s_args	t_args;
 
 void	init(t_trace *trace, t_args *args);
@@ -46,5 +69,6 @@ void	init(t_trace *trace, t_args *args);
 void	print_header(t_trace *trace);
 
 void	trace_send(t_trace *trace);
+void	trace_recv(t_trace *trace);
 
 #endif /* FT_TRACEROUTE_H */

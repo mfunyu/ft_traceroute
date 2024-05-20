@@ -3,7 +3,7 @@
 
 void	trace_send(t_trace *trace)
 {
-	char	msg[TRACE_DATALEN] = "SUPERHERO";
+	char	msg[TRACE_DATALEN] = "SUPERMAN";
 	ssize_t	ret;
 
 	ret = sendto(trace->udpfd, msg, TRACE_DATALEN, 0, (struct sockaddr *)&trace->dst_addr, sizeof(struct sockaddr));

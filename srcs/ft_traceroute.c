@@ -63,6 +63,7 @@ void	run_try(t_trace *trace)
 			continue;
 		}
 		else {
+			trace_recv(trace);
 			printf("  %dms", 42);
 		}
 	}
