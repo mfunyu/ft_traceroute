@@ -44,27 +44,32 @@ void	run_try(t_trace *trace)
 	int		ready;
 	int		maxfd;
 	fd_set	readfds;
+	bool	is_listening;
 
 	maxfd = trace->icmpfd + 1;
 	for (int i = 0; i < trace->num_tries; i++)
 	{
 		trace_send(trace);
-		FD_ZERO(&readfds);
-		FD_SET(trace->icmpfd, &readfds);
-		trace->timeout.tv_sec = trace->num_wait;
-		trace->timeout.tv_usec = 0;
-		ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
-		if (ready < 0)
-			error_exit_strerr("select");
-		if (ready == 0)
-		{
-			printf(" * ");
-			fflush(stdout);
-			continue;
-		}
-		else {
-			trace_recv(trace);
-			printf("  %dms", 42);
+		is_listening = true;
+		while (is_listening) {
+			FD_ZERO(&readfds);
+			FD_SET(trace->icmpfd, &readfds);
+			trace->timeout.tv_sec = trace->num_wait;
+			trace->timeout.tv_usec = 0;
+			ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
+			if (ready < 0)
+				error_exit_strerr("select");
+			if (ready == 0)
+			{
+				printf(" * ");
+				fflush(stdout);
+			}
+			else {
+				if (trace_recv(trace) == -1)
+					continue;
+				printf("  %dms", 42);
+			}
+			is_listening = false;
 		}
 	}
 	printf("\n");
@@ -84,10 +89,12 @@ void	ft_traceroute(t_trace *trace)
 	print_header(trace);
 	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
 	{
+		trace->dst_addr.sin_port = htons(trace->port);
 		printf(" %2d  ", hop);
 		set_ttl(trace->udpfd, trace->ttl);
 		run_try(trace);
 		trace->ttl++;
+		trace->port++;
 	}
 }
 

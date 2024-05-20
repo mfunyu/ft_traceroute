@@ -36,6 +36,7 @@ typedef struct	s_trace {
 	char				dst_ip[INET_ADDRSTRLEN];
 	int					ttl;
 	struct timeval 		timeout;
+	int					port;
 
 	int		num_first_hop;
 	int		num_max_hop;
@@ -54,12 +55,12 @@ typedef struct	s_packet
 		struct
 		{
 			struct iphdr	iphdr;
-			struct icmphdr	icmphdr;
+			struct udphdr	udphdr;
 		} error;
 	} un;
-# define req_iphdr		un.error.iphdr
-# define req_icmphdr	un.error.icmphdr
-# define icmpdata		un.data
+# define req_iphdr	un.error.iphdr
+# define req_udphdr	un.error.udphdr
+# define icmpdata	un.data
 }				t_packet;
 
 typedef struct s_args	t_args;
@@ -69,6 +70,6 @@ void	init(t_trace *trace, t_args *args);
 void	print_header(t_trace *trace);
 
 void	trace_send(t_trace *trace);
-void	trace_recv(t_trace *trace);
+int		trace_recv(t_trace *trace);
 
 #endif /* FT_TRACEROUTE_H */

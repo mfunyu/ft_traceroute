@@ -83,8 +83,9 @@ void	init(t_trace *trace, t_args *args)
 		trace->num_wait = args->flags[WAIT];
 # endif
 	trace->ttl = trace->num_first_hop;
+	trace->port = trace->num_port;
 	set_sockaddr_in_by_hostname(&trace->dst_addr, trace->dst_hostname);
-	trace->dst_addr.sin_port = htons(trace->num_port);
+	trace->dst_addr.sin_port = htons(trace->port);
 	set_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
 	trace->udpfd = _init_udp_socket();
 	trace->icmpfd = _init_icmp_socket();
