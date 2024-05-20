@@ -21,7 +21,7 @@ void	_recv(t_trace *trace, t_packet *packet)
 bool	_is_valid_packet(t_packet *packet, int port)
 {
 	if (packet->icmphdr.type != ICMP_TIME_EXCEEDED
-		&& packet->icmphdr.code != ICMP_DEST_UNREACH)
+		&& packet->icmphdr.type != ICMP_DEST_UNREACH)
 		return (false);
 
 	if (packet->req_udphdr.dest != htons(port))
