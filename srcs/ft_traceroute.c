@@ -45,16 +45,17 @@ void	run_try(t_trace *trace)
 	int		maxfd;
 	fd_set	readfds;
 
-	maxfd = trace->udpfd + 1;
+	maxfd = trace->icmpfd + 1;
 	for (int i = 0; i < trace->num_tries; i++)
 	{
 		trace_send(trace);
 		FD_ZERO(&readfds);
+		FD_SET(trace->icmpfd, &readfds);
 		trace->timeout.tv_sec = trace->num_wait;
 		trace->timeout.tv_usec = 0;
 		ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
 		if (ready < 0)
-			error_exit("select");
+			error_exit_strerr("select");
 		if (ready == 0)
 		{
 			printf(" * ");

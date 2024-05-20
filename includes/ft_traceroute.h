@@ -25,6 +25,7 @@
 
 typedef struct	s_trace {
 	int					udpfd;
+	int					icmpfd;
 	char				*dst_hostname;
 	struct sockaddr_in	dst_addr;
 	char				dst_ip[INET_ADDRSTRLEN];

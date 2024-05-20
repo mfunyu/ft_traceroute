@@ -9,7 +9,7 @@
 #include <stddef.h>
 #include <sys/socket.h>
 
-int	init_socket()
+int	_init_udp_socket()
 {
 	int		udpfd;
 
@@ -17,6 +17,18 @@ int	init_socket()
 	if (udpfd < 0)
 		error_exit_strerr("socket");
 	return (udpfd);
+}
+
+int	_init_icmp_socket()
+{
+	int		icmpfd;
+
+	icmpfd = socket(PF_INET, SOCK_RAW, IPPROTO_ICMP);
+	if (icmpfd < 0)
+	{
+		error_exit_strerr("socket");
+	}
+	return (icmpfd);
 }
 
 void	set_ip_str_by_sockaddr(char *ip, struct sockaddr_in const *addr_in)
@@ -74,6 +86,6 @@ void	init(t_trace *trace, t_args *args)
 	set_sockaddr_in_by_hostname(&trace->dst_addr, trace->dst_hostname);
 	trace->dst_addr.sin_port = htons(trace->num_port);
 	set_ip_str_by_sockaddr(trace->dst_ip, &trace->dst_addr);
-	trace->udpfd = init_socket();
-	trace->timeout.tv_sec = trace->num_wait;
+	trace->udpfd = _init_udp_socket();
+	trace->icmpfd = _init_icmp_socket();
 }
