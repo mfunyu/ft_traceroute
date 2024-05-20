@@ -50,7 +50,8 @@ void	run_try(t_trace *trace)
 	{
 		trace_send(trace);
 		FD_ZERO(&readfds);
-		FD_SET(trace->udpfd, &readfds);
+		trace->timeout.tv_sec = trace->num_wait;
+		trace->timeout.tv_usec = 0;
 		ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
 		if (ready < 0)
 			error_exit("select");
