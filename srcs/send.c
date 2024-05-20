@@ -1,6 +1,6 @@
 #include "ft_traceroute.h"
 #include "error.h"
-#include "utils.h"
+#include "utils_time.h"
 
 void	trace_send(t_trace *trace)
 {

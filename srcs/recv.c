@@ -1,7 +1,7 @@
 #include "ft_traceroute.h"
 #include "error.h"
 #include "libft.h"
-#include "utils.h"
+#include "utils_time.h"
 #include "network.h"
 #include <stdbool.h>
 
