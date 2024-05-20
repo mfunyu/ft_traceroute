@@ -28,6 +28,12 @@
 ** };
 */
 
+typedef enum	e_status {
+	CONTINUE = 0,
+	RETRY = -1,
+	STOP = 1
+}				t_status;
+
 typedef struct	s_trace {
 	int					udpfd;
 	int					icmpfd;
@@ -70,6 +76,6 @@ void	init(t_trace *trace, t_args *args);
 void	print_header(t_trace *trace);
 
 void	trace_send(t_trace *trace);
-int		trace_recv(t_trace *trace);
+t_status	trace_recv(t_trace *trace);
 
 #endif /* FT_TRACEROUTE_H */

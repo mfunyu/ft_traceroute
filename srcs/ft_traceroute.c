@@ -39,12 +39,14 @@ static void	_handle_args(t_args *args, int ac, char **av)
 		error_exit_usage("missing host operand");
 }
 
-void	run_try(t_trace *trace)
+t_status	run_try(t_trace *trace)
 {
 	int		ready;
 	int		maxfd;
 	fd_set	readfds;
 	bool	is_listening;
+	t_status	status = CONTINUE;
+	t_status	ret;
 
 	maxfd = trace->icmpfd + 1;
 	for (int i = 0; i < trace->num_tries; i++)
@@ -65,14 +67,18 @@ void	run_try(t_trace *trace)
 				fflush(stdout);
 			}
 			else {
-				if (trace_recv(trace) == -1)
+				ret = trace_recv(trace);
+				if (ret == RETRY)
 					continue;
+				if (ret == STOP)
+					status = STOP;
 				printf("  %dms", 42);
 			}
 			is_listening = false;
 		}
 	}
 	printf("\n");
+	return (status);
 }
 
 void	set_ttl(int udpfd, int ttl)
@@ -92,7 +98,8 @@ void	ft_traceroute(t_trace *trace)
 		trace->dst_addr.sin_port = htons(trace->port);
 		printf(" %2d  ", hop);
 		set_ttl(trace->udpfd, trace->ttl);
-		run_try(trace);
+		if (run_try(trace) == STOP)
+			break;
 		trace->ttl++;
 		trace->port++;
 	}

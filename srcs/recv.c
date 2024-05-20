@@ -3,7 +3,7 @@
 #include "libft.h"
 #include <sys/socket.h>
 
-int	trace_recv(t_trace *trace)
+t_status	trace_recv(t_trace *trace)
 {
 	t_packet	packet = {0};
 	ssize_t		ret;
@@ -17,9 +17,15 @@ int	trace_recv(t_trace *trace)
 		error_exit_strerr("recvfrom");
 	}
 	if (packet.icmphdr.type != ICMP_TIME_EXCEEDED && packet.icmphdr.code != ICMP_DEST_UNREACH)
-		return (-1);
+		return (RETRY);
 
 	if (packet.req_udphdr.dest != htons(trace->port))
-		return (-1);
-	return (0);
+		return (RETRY);
+
+	if (packet.icmphdr.type == ICMP_DEST_UNREACH)
+		return (STOP);
+	if (packet.iphdr.saddr == trace->dst_addr.sin_addr.s_addr)
+		return (STOP);
+
+	return (CONTINUE);
 }
