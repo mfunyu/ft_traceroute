@@ -65,6 +65,7 @@ int	select_loop(t_trace *trace)
 void	run_try(t_trace *trace)
 {
 	int		ready;
+	bool	ip_printed = false;
 
 	for (int i = 0; i < trace->num_tries; i++)
 	{
@@ -77,7 +78,11 @@ void	run_try(t_trace *trace)
 			printf(" * ");
 			fflush(stdout);
 		} else {
-			printf(" %.3fms", trace->triptime);
+			if (!ip_printed) {
+				printf(" %s ", trace->src_ip);
+				ip_printed = true;
+			}
+			printf(" %.3fms ", trace->triptime);
 		}
 	}
 	printf("\n");

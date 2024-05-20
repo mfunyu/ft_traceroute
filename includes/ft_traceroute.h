@@ -41,6 +41,7 @@ typedef struct	s_trace {
 
 	struct timeval	tv_send;
 	double			triptime;
+	char			src_ip[INET_ADDRSTRLEN];
 	bool			is_terminated;
 
 	int		num_first_hop;
