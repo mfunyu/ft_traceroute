@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "network.h"
 
-void	_recv(t_trace *trace, t_packet *packet)
+static void	_recv(t_trace *trace, t_packet *packet)
 {
 	ssize_t			ret;
 	socklen_t		addr_len = sizeof(struct sockaddr);
@@ -19,7 +19,7 @@ void	_recv(t_trace *trace, t_packet *packet)
 	}
 }
 
-bool	_is_valid_packet(t_packet *packet, int port)
+static bool	_is_valid_packet(t_packet *packet, int port)
 {
 	if (packet->icmphdr.type != ICMP_TIME_EXCEEDED
 		&& packet->icmphdr.type != ICMP_DEST_UNREACH)

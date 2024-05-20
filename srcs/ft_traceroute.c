@@ -7,21 +7,7 @@
 #include <sys/select.h>
 #include <sys/time.h>
 
-static void	_handle_args(t_args *args, int ac, char **av)
-{
-	if (ac <= 1)
-		error_exit_usage("missing host operand");
-	parse_args(args, ac, av);
-	if (args->flags[HELP])
-	{
-		print_help();
-		exit(EXIT_SUCCESS);
-	}
-	if (!args->params[0])
-		error_exit_usage("missing host operand");
-}
-
-int	select_loop(t_trace *trace)
+static int	_select_loop(t_trace *trace)
 {
 	fd_set	readfds;
 	int		ready;
@@ -44,7 +30,7 @@ int	select_loop(t_trace *trace)
 	return (ready);
 }
 
-void	run_try(t_trace *trace)
+static void	_run_try(t_trace *trace)
 {
 	int		ready;
 	bool	ip_printed = false;
@@ -54,7 +40,7 @@ void	run_try(t_trace *trace)
 		trace_send(trace);
 		ready = -1;
 		while (ready < 0) {
-			ready = select_loop(trace);
+			ready = _select_loop(trace);
 		}
 		if (ready == 0) {
 			printf(" * ");
@@ -70,7 +56,7 @@ void	run_try(t_trace *trace)
 	printf("\n");
 }
 
-void	ft_traceroute(t_trace *trace)
+static void	_ft_traceroute(t_trace *trace)
 {
 	print_header(trace);
 	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
@@ -78,12 +64,26 @@ void	ft_traceroute(t_trace *trace)
 		trace->dst_addr.sin_port = htons(trace->port);
 		printf(" %2d  ", hop);
 		socket_set_ttl(trace->udpfd, trace->ttl);
-		run_try(trace);
+		_run_try(trace);
 		if (trace->is_terminated)
 			break;
 		trace->ttl++;
 		trace->port++;
 	}
+}
+
+static void	_handle_args(t_args *args, int ac, char **av)
+{
+	if (ac <= 1)
+		error_exit_usage("missing host operand");
+	parse_args(args, ac, av);
+	if (args->flags[HELP])
+	{
+		print_help();
+		exit(EXIT_SUCCESS);
+	}
+	if (!args->params[0])
+		error_exit_usage("missing host operand");
 }
 
 int	main(int ac, char **av)
@@ -93,6 +93,6 @@ int	main(int ac, char **av)
 
 	_handle_args(&args, ac, av);
 	init(&trace, &args);
-	ft_traceroute(&trace);
+	_ft_traceroute(&trace);
 	return (0);
 }
