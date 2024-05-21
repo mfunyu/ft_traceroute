@@ -1,7 +1,15 @@
 NAME	:= ft_traceroute
 
 SRCS	:= ft_traceroute.c \
-			parser.c
+			parser.c \
+			error.c \
+			init.c \
+			print.c \
+			send.c \
+			recv.c \
+			socket.c \
+			resolve.c \
+			utils_time.c
 
 # ---------------------------------------------------------------------------- #
 #                                     PATHS                                    #
@@ -21,6 +29,10 @@ DEPS	:= $(OBJS:.o=.d)
 CC		:= gcc
 CFLAGS	:= -Wall -Wextra -Werror
 INCLUDES:= -I $(DIR_INCLUDES) -I $(LIBFT)
+
+ifdef BONUS
+	CFLAGS	+= -D BONUS
+endif
 
 # ---------------------------------------------------------------------------- #
 #                                     RULES                                    #
@@ -55,6 +67,9 @@ fclean	: clean
 re		: fclean
 	$(MAKE) all
 
+.PHONY	: bonus
+bonus	:
+	make BONUS=1
 
 # ---------------------------------------------------------------------------- #
 #                                    DOCKER                                    #
@@ -68,3 +83,13 @@ docker :
 .PHONY:	conn
 conn	:
 	docker exec -it $(NAME)_img /bin/bash
+
+# ---------------------------------------------------------------------------- #
+#                                     TEST                                     #
+# ---------------------------------------------------------------------------- #
+
+.PHONY: test
+test	: all
+	$(MAKE) -j fclean
+	$(MAKE) -j bonus
+	cd ./test && ./test_compare.sh test_option_param.sh
