@@ -35,6 +35,10 @@ Recoding the traceroute command to deepen the knowledge of the network (TCP/IP) 
   | -q, --queries | 1 - 10 (error) | Sets the number of probe packets per hop. (default: 3) |
   | -w, --wait | 0 - 60 (int) | wait NUM seconds for response (default: 3) |
 
+#### Improvements
+
+- display current ttl instead of current hop
+- display error msg when first-ttl is greater than max-hops
 
 ## Implementations
 

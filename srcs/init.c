@@ -1,5 +1,6 @@
 #include "ft_traceroute.h"
 #include "parser.h"
+#include "error.h"
 #include "network.h"
 
 void	init(t_trace *trace, t_args *args)
@@ -30,4 +31,7 @@ void	init(t_trace *trace, t_args *args)
 	resolve_ip_str_by_sockaddr_in(trace->dst_ip, &trace->dst_addr);
 	trace->udpfd = socket_udp();
 	trace->icmpfd = socket_icmp();
+
+	if (trace->num_first_hop > trace->num_max_hop)
+		error_exit("first hop out of range");
 }
