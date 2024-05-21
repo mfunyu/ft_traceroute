@@ -32,8 +32,8 @@ static int	_select_loop(t_trace *trace)
 
 static void	_run_try(t_trace *trace)
 {
-	int		ready;
-	bool	ip_printed = false;
+	int			ready;
+	in_addr_t	prev_addr = 0;
 
 	for (int i = 0; i < trace->num_tries; i++)
 	{
@@ -46,9 +46,9 @@ static void	_run_try(t_trace *trace)
 			printf(" * ");
 			fflush(stdout);
 		} else {
-			if (!ip_printed) {
-				printf(" %s ", trace->src_ip);
-				ip_printed = true;
+			if (i == 0 || prev_addr != trace->src_ip.s_addr) {
+				printf(" %s ", inet_ntoa(trace->src_ip));
+				prev_addr = trace->src_ip.s_addr;
 			}
 			printf(" %.3fms ", trace->triptime);
 		}

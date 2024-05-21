@@ -42,7 +42,7 @@ int	trace_recv(t_trace *trace)
 
 	trace->triptime = diff_time(trace->tv_send, tv_recv);
 
-	resolve_ip_str_by_in_addr(trace->src_ip, packet.iphdr.saddr);
+	trace->src_ip.s_addr = packet.iphdr.saddr;
 
 	if (packet.icmphdr.type == ICMP_DEST_UNREACH ||
 		packet.iphdr.saddr == trace->dst_addr.sin_addr.s_addr)
