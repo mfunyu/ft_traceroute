@@ -68,7 +68,11 @@ static void	_ft_traceroute(t_trace *trace)
 	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
 	{
 		trace->dst_addr.sin_port = htons(trace->port);
+#ifdef BONUS
+		printf(" %2d  ", trace->ttl);
+# else
 		printf(" %2d  ", hop);
+# endif
 		socket_set_ttl(trace->udpfd, trace->ttl);
 		_run_try(trace);
 		if (trace->is_terminated)
@@ -83,7 +87,7 @@ static void	_handle_args(t_args *args, int ac, char **av)
 	if (ac <= 1)
 		error_exit_usage("missing host operand");
 	parse_args(args, ac, av);
-	if (args->flags[HELP])
+	if (args->flags[HELP] == 1)
 	{
 		print_help();
 		exit(EXIT_SUCCESS);
