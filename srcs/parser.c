@@ -180,9 +180,11 @@ void	parse_args(t_args *args, int ac, char **av)
 	idx = 0;
 	skip = false;
 	args->params = av;
+	for (int i = 0; i < TOTAL; i++)
+		args->flags[i] = -1;
 	for (int i = 1; i < ac; i++)
 	{
-		if (args->flags[HELP])
+		if (args->flags[HELP] == 1)
 			return ;
 		if (av[i][0] == '-' && av[i][1])
 		{

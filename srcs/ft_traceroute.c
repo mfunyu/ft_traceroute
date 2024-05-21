@@ -83,7 +83,7 @@ static void	_handle_args(t_args *args, int ac, char **av)
 	if (ac <= 1)
 		error_exit_usage("missing host operand");
 	parse_args(args, ac, av);
-	if (args->flags[HELP])
+	if (args->flags[HELP] == 1)
 	{
 		print_help();
 		exit(EXIT_SUCCESS);
