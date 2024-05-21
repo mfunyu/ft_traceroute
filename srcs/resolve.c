@@ -30,16 +30,8 @@ void	resolve_ip_str_by_sockaddr_in(char *ip, struct sockaddr_in const *addr_in)
 {
 	char const	*ret;
 
-	ret = inet_ntop(AF_INET, &addr_in->sin_addr, ip, INET_ADDRSTRLEN);
-	if (!ret)
-		error_exit_strerr("inet_ntop error");
-}
-
-void	resolve_ip_str_by_in_addr(char *ip, in_addr_t saddr)
-{
-	char const	*ret;
-
-	ret = inet_ntop(AF_INET, &saddr, ip, INET_ADDRSTRLEN);
+	ret = inet_ntoa(addr_in->sin_addr);
+	ft_memcpy(ip, ret, INET_ADDRSTRLEN);
 	if (!ret)
 		error_exit_strerr("inet_ntop error");
 }
