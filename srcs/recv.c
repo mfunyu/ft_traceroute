@@ -46,8 +46,8 @@ int	trace_recv(t_trace *trace)
 	trace->code = packet.icmphdr.code;
 	trace->src_ip.s_addr = packet.iphdr.saddr;
 
-	if (packet.icmphdr.type == ICMP_DEST_UNREACH ||
-		packet.iphdr.saddr == trace->dst_addr.sin_addr.s_addr)
+	if (trace->type == ICMP_DEST_UNREACH ||
+		trace->src_ip.s_addr == trace->dst_addr.sin_addr.s_addr)
 	{
 		trace->is_terminated = true;
 	}
