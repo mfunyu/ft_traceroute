@@ -11,17 +11,17 @@ static const char	_unreach_sign[NR_ICMP_UNREACH + 2] = "NHPPFS**U**TTXXX";
 
 static int	_select_loop(t_trace *trace)
 {
-	fd_set	readfds;
-	int		ready;
-	int		ret;
-	int		maxfd;
+	fd_set			readfds;
+	int				ready;
+	int				ret;
+	struct timeval timeout = {
+		.tv_sec = trace->num_wait,
+		.tv_usec = 0
+	};
 
-	maxfd = trace->icmpfd + 1;
 	FD_ZERO(&readfds);
 	FD_SET(trace->icmpfd, &readfds);
-	trace->timeout.tv_sec = trace->num_wait;
-	trace->timeout.tv_usec = 0;
-	ready = select(maxfd, &readfds, NULL, NULL, &trace->timeout);
+	ready = select(trace->icmpfd + 1, &readfds, NULL, NULL, &timeout);
 	if (ready < 0)
 		error_exit_strerr("select");
 	if (ready != 0) {

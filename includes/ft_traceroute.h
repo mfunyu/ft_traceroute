@@ -36,7 +36,6 @@ typedef struct	s_trace {
 	struct sockaddr_in	dst_addr;
 	char				dst_ip[INET_ADDRSTRLEN];
 	int					ttl;
-	struct timeval 		timeout;
 	int					port;
 
 	struct timeval	tv_send;
