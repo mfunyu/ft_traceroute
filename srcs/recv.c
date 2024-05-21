@@ -42,6 +42,8 @@ int	trace_recv(t_trace *trace)
 
 	trace->triptime = diff_time(trace->tv_send, tv_recv);
 
+	trace->type = packet.icmphdr.type;
+	trace->code = packet.icmphdr.code;
 	trace->src_ip.s_addr = packet.iphdr.saddr;
 
 	if (packet.icmphdr.type == ICMP_DEST_UNREACH ||

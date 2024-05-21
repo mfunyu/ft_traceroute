@@ -7,6 +7,8 @@
 #include <sys/select.h>
 #include <sys/time.h>
 
+static const char	_unreach_sign[NR_ICMP_UNREACH + 2] = "NHPPFS**U**TTXXX";
+
 static int	_select_loop(t_trace *trace)
 {
 	fd_set	readfds;
@@ -51,6 +53,10 @@ static void	_run_try(t_trace *trace)
 				prev_addr = trace->src_ip.s_addr;
 			}
 			printf(" %.3fms ", trace->triptime);
+			if (trace->type == ICMP_DEST_UNREACH
+				&& trace->code != ICMP_PORT_UNREACH) {
+				printf("!%c ", _unreach_sign[trace->code & 0x0f]);
+			}
 		}
 	}
 	printf("\n");

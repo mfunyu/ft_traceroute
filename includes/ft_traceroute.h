@@ -42,6 +42,8 @@ typedef struct	s_trace {
 	struct timeval	tv_send;
 	double			triptime;
 	struct in_addr	src_ip;
+	int				type;
+	int				code;
 	bool			is_terminated;
 
 	int		num_first_hop;
