@@ -32,7 +32,7 @@ static int	_select_loop(t_trace *trace)
 	return (ready);
 }
 
-static void	_run_try(t_trace *trace)
+static void	_run_try(t_trace *trace, int hop)
 {
 	int			ready;
 	in_addr_t	prev_addr = 0;
@@ -45,9 +45,12 @@ static void	_run_try(t_trace *trace)
 			ready = _select_loop(trace);
 		}
 		if (ready == 0) {
-			printf(" * ");
-			fflush(stdout);
+			if (try == 0)
+				print_index(trace->ttl, hop);
+			print_star();
 		} else {
+			if (try == 0)
+				print_index(trace->ttl, hop);
 			if (try == 0 || prev_addr != trace->src_ip.s_addr) {
 				printf(" %s ", inet_ntoa(trace->src_ip));
 				prev_addr = trace->src_ip.s_addr;
@@ -68,13 +71,8 @@ static void	_ft_traceroute(t_trace *trace)
 	for (int hop = 1; trace->ttl <= trace->num_max_hop; hop++)
 	{
 		trace->dst_addr.sin_port = htons(trace->port);
-#ifdef BONUS
-		printf(" %2d  ", trace->ttl);
-# else
-		printf(" %2d  ", hop);
-# endif
 		socket_set_ttl(trace->udpfd, trace->ttl);
-		_run_try(trace);
+		_run_try(trace, hop);
 		if (trace->is_terminated)
 			break;
 		trace->ttl++;

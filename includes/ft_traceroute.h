@@ -76,6 +76,8 @@ void	init(t_trace *trace, t_args *args);
 
 void	print_help();
 void	print_header(t_trace *trace);
+void	print_index(int ttl, int hop);
+void	print_star();
 
 void	trace_send(t_trace *trace);
 int		trace_recv(t_trace *trace);

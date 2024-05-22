@@ -1,5 +1,7 @@
-# include "ft_traceroute.h"
-# include <stdio.h>
+#include "ft_traceroute.h"
+#include "libft.h"
+#include <stdio.h>
+#include <unistd.h>
 
 void	print_help()
 {
@@ -24,4 +26,27 @@ void	print_header(t_trace *trace)
 {
 	printf("traceroute to %s (%s), %d hops max\n",
 		trace->dst_hostname, trace->dst_ip, trace->num_max_hop);
+}
+
+void	print_index(int ttl, int hop)
+{
+	int		index;
+
+# ifdef BONUS
+	(void)hop;
+	index = ttl;
+# else
+	(void)ttl;
+	index = hop;
+# endif
+	ft_putchar_fd(' ', STDOUT_FILENO);
+	if (index < 10)
+		ft_putchar_fd(' ', STDOUT_FILENO);
+	ft_putnbr_fd(index, STDOUT_FILENO);
+	ft_putstr_fd("  ", STDOUT_FILENO);
+}
+
+void	print_star()
+{
+	ft_putstr_fd(" * ", STDOUT_FILENO);
 }
