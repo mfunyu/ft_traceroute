@@ -16,7 +16,7 @@ Recoding the traceroute command to deepen the knowledge of the network (TCP/IP) 
 - The destination port number will be incremented by each probe
 
 
-## Feachers
+## Features
 
 - parameters
   - takes IPv4 (address/hostname) as a program parameter
